@@ -1,5 +1,3 @@
 # Ohjelmistotekniikka, harjoitustyö
 
-Tavoitteena on tehdä klassikkolautapeli kimble sähköisessä muodossa yksinkertaisella käyttöliittymällä. Pelin nykyinen tila ja vanhojen pelien tulokset pystyy tallentamaan.
-
-[Laskarit](https://github.com/nlinnanen/ot-harjoitustyo/tree/main/laskarit)
+Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovelluksessa on mahdollista lisätä, poistaa ja muokata jäseniä. Jäseniä voi hakea nimen perusteella. Sovellus on toteutettu Pythonilla ja se tallentaa jäsenet PostgreSQL-tietokantaan. Sovellus on tehty osana Helsingin yliopiston Ohjelmistotekniikka-kurssia.
