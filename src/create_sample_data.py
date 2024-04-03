@@ -60,6 +60,11 @@ def delete_db_contents():
     with conn.cursor() as cur:
         cur.execute("DELETE FROM members")
         cur.execute("DELETE FROM users")
+        user_repository = UserRepository(conn)
+        user_repository.add_user(
+            email="admin@admin.com",
+            password="admin"
+        )
         conn.commit()
 
 

@@ -17,6 +17,15 @@ class UserRepository:
             cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
             user_data = cur.fetchone()
             return user_data if user_data else None
+    
+    def get_user_by_email(self, email):
+        """
+        Fetch a single user by their email.
+        """
+        with self.db_conn.cursor() as cur:
+            cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+            user_data = cur.fetchone()
+            return user_data if user_data else None
         
     def get_all_users(self):
         """
