@@ -3,6 +3,7 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
+  admin BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -17,4 +18,4 @@ CREATE TABLE members (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (email, password) VALUES ('admin@admin.com', 'admin');
+INSERT INTO users (email, password) VALUES ('admin@admin.com', 'admin', TRUE);
