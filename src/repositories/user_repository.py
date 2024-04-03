@@ -26,17 +26,18 @@ class UserRepository:
             cur.execute("SELECT * FROM users")
             users = cur.fetchall()
             return users
-
-    def add_user(self, email, password):
-        """
-        Add a new user to the database.
-        """
-        with self.db_conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO users (email, password) VALUES (%s, %s) RETURNING id", (email, password))
-            self.db_conn.commit()
-            user_id = cur.fetchone()[0]
-            return user_id
+   
+    
+    def add_user(self, email: str, password: str) -> str:
+      """
+      Add a new user to the database.
+      """
+      with self.db_conn.cursor() as cur:
+        cur.execute(
+          "INSERT INTO users (email, password) VALUES (%s, %s) RETURNING id", (email, password))
+        self.db_conn.commit()
+        user_id = cur.fetchone()[0]
+        return user_id
 
     def update_user(self, user_id, **kwargs):
         """
