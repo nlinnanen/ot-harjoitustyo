@@ -9,7 +9,7 @@ def main():
         password = input("Enter a password: ")
         user = user_service.log_in(username, password)
         if user:
-            print(f"Welcome {user[1]}")
+            print(f"Welcome {user}")
             break
         else:
             print("Invalid username or password")

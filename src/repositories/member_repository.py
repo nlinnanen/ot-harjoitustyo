@@ -1,5 +1,8 @@
 
 
+from entities.member import Member
+
+
 class MemberRepository:
     def __init__(self, db_conn):
         """
@@ -15,7 +18,7 @@ class MemberRepository:
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM members WHERE id = %s", (member_id,))
             member_data = cur.fetchone()
-            return member_data if member_data else None
+            return Member(*member_data) if member_data else None
 
     def get_all_members(self):
         """
@@ -24,7 +27,7 @@ class MemberRepository:
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM members")
             members = cur.fetchall()
-            return members
+            return [Member(*m) for m in members]
 
     def add_member(self, first_name, last_name, start_year, member_until, home_municipality, user_id):
         """

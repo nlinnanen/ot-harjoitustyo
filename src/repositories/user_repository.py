@@ -1,5 +1,7 @@
 import psycopg2
 
+from entities.user import User
+
 
 class UserRepository:
     def __init__(self, db_conn):
@@ -16,7 +18,7 @@ class UserRepository:
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
             user_data = cur.fetchone()
-            return user_data if user_data else None
+            return User(*user_data) if user_data else None
     
     def get_user_by_email(self, email):
         """
@@ -25,7 +27,7 @@ class UserRepository:
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM users WHERE email = %s", (email,))
             user_data = cur.fetchone()
-            return user_data if user_data else None
+            return User(*user_data) if user_data else None
         
     def get_all_users(self):
         """
@@ -34,7 +36,7 @@ class UserRepository:
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM users")
             users = cur.fetchall()
-            return users
+            return [User(*u) for u in users]
    
     
     def add_user(self, email: str, password: str) -> str:

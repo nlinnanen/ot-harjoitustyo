@@ -9,6 +9,6 @@ class UserService():
 
     def log_in(self, email, password):
         user = self.user_repository.get_user_by_email(email)
-        if user and user[2] == password:
+        if user and user.password == password:
             return user
         return None
