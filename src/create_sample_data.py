@@ -6,7 +6,7 @@ import queue  # For catching the Empty exception
 
 from db.member_repository import MemberRepository
 from db.user_repository import UserRepository
-from db import conn, create_db_conn
+from db import create_db_conn, delete_db_contents
 
 fake = Faker(locale='fi_FI')
 task_queue = Queue()
