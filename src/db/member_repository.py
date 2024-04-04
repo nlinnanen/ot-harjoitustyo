@@ -29,15 +29,25 @@ class MemberRepository:
             members = cur.fetchall()
             return [Member(*m) for m in members]
 
-    def add_member(self, first_name, last_name, start_year, member_until, home_municipality, user_id):
+    def add_member(self,
+                   first_name,
+                   last_name,
+                   start_year,
+                   member_until,
+                   home_municipality,
+                   user_id):
         """
         Add a new member to the database.
         """
         with self.db_conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO members (first_name, last_name, start_year, member_until, home_municipality, user_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
-                (first_name, last_name, start_year, member_until, home_municipality, user_id)
-            )
+            cur.execute("""
+                        INSERT INTO members (first_name, last_name, start_year, member_until, home_municipality, user_id) 
+                        VALUES (%s, %s, %s, %s, %s, %s) 
+                        RETURNING id
+                    """,
+                        (first_name, last_name, start_year,
+                         member_until, home_municipality, user_id)
+                        )
             self.db_conn.commit()
             member_id = cur.fetchone()[0]
             return member_id
@@ -54,7 +64,7 @@ class MemberRepository:
             cur.execute(
                 f"UPDATE members SET {set_clause} WHERE id = %s", tuple(values))
             self.db_conn.commit()
-    
+
     def delete_member(self, member_id):
         """
         Delete a member from the database by member ID.

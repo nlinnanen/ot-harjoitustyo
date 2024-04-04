@@ -1,7 +1,5 @@
 
-from db import member_repository, user_repository
 from services.registry_service import RegistryService
-
 
 
 def main():
@@ -13,84 +11,87 @@ def main():
         if user:
             print(f"Welcome {user}")
             break
-        else:
-            print("Invalid username or password")
-    
+
+        print("Invalid username or password")
+
     print("You are now logged in")
 
+    registry = RegistryService()
+
     while True:
-        command = input("Enter a command: ")
-        match command.lower():
-            case "exit":
-                print("Goodbye")
-                break
-            case "help":
-                print("Help message")
-            case "list members":
-                print("List of members:")
-                members = member_repository.get_all_members()
-                for member in members:
-                    print(member)
-            case "update member":
-                member = None
-                while True:
-                    id = input("Enter member ID: ")
-                    member = member_repository.get_member_by_id(id)
-                    if not member:
-                        print("Invalid member ID")
-                    else:
-                        break
-                    
+        command = input("Enter a command: ").lower()
+        if command == "exit":
+            print("Goodbye")
+            break
+
+        if command == "help":
+            print("Help message")
+        elif command == "list members":
+            print("List of members:")
+            members = registry.member_repository.get_all_members()
+            for member in members:
+                print(member)
+        elif command == "update member":
+            member = None
+            while True:
+                member_id = input("Enter member ID: ")
+                member = registry.member_repository.get_member_by_id(member_id)
+                if not member:
+                    print("Invalid member ID")
+                else:
+                    break
+
                 print(f"Member {member}")
-                
-                while True:
-                    field = input("Enter field to update (empty to exit): ")
-                    if field == "":
-                        break
 
-                    if field not in member.__dict__:
-                        print("Invalid field")
-                        continue
+            while True:
+                field = input("Enter field to update (empty to exit): ")
+                if field == "":
+                    break
 
-                    value = input("Enter new value: ")
-                    member_repository.update_member(member.id, **{field: value})
-                    print("Member updated")
-                    
-            case "log out":
-                registry.log_out()
-                print("You are now logged out")
-            
-            case "get member":
-                while True:
-                    id = input("Enter member ID: ")
-                    member = member_repository.get_member_by_id(id)
-                    if not member:
-                        print("Invalid member ID")
-                    else:
-                        user = user_repository.get_user_by_id(member.user_id)
-                        print(member)
-                        print(user)
-                        break
+                if field not in member.__dict__:
+                    print("Invalid field")
+                    continue
 
-            case "delete member":
-                while True:
-                    id = input("Enter member ID: ")
-                    member = member_repository.get_member_by_id(id)
-                    if not member:
-                        print("Invalid member ID")
-                    else:
-                        break
-                confirm = input(f"Are you sure you want to delete {member}? (y/n): ")
-                if confirm.lower() == "y":
-                    try:
-                        registry.delete_user(member.user_id)
-                        print("Member deleted")
-                    except Exception as e:
-                        print(f"Error deleting member: {e}")
+                value = input("Enter new value: ")
+                registry.member_repository.update_member(
+                    member.id, **{field: value})
+                print("Member updated")
 
-            case _:
-                print("Unknown command")
-    
+        elif command == "log out":
+            registry.log_out()
+            print("You are now logged out")
+
+        elif command == "get member":
+            while True:
+                member_id = input("Enter member ID: ")
+                member = registry.member_repository.get_member_by_id(member_id)
+                if not member:
+                    print("Invalid member ID")
+                else:
+                    user = registry.user_repository.get_user_by_id(
+                        member.user_id)
+                    print(member)
+                    print(user)
+                    break
+
+        elif command == "delete member":
+            while True:
+                member_id = input("Enter member ID: ")
+                member = registry.member_repository.get_member_by_id(member_id)
+                if not member:
+                    print("Invalid member ID")
+                else:
+                    break
+
+            confirm = input(
+                f"Are you sure you want to delete {member}? (y/n): ")
+            if confirm.lower() == "y":
+                registry.delete_member(member.id)
+                print("Member deleted")
+
+        else:
+            print("Unknown command")
+
 
 if __name__ == "__main__":
     main()

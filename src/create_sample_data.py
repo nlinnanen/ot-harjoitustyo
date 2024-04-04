@@ -1,27 +1,25 @@
 
 
 from multiprocessing import Process, Queue
-from faker import Faker
 import queue  # For catching the Empty exception
+from faker import Faker
 
 from db.member_repository import MemberRepository
 from db.user_repository import UserRepository
 from db import create_db_conn, delete_db_contents
+from entities.user import User
 
 fake = Faker(locale='fi_FI')
-task_queue = Queue()
 
 N = 10000
 
 
 def create_sample_user(user_repository: UserRepository):
-    return user_repository.add_user(
-        email=fake.email(),
-        password="password"
-    )
+    user = User(email=fake.email(), password="password")
+    return user_repository.add_user(user)
 
 
-def create_sample_member(member_repository: MemberRepository, user_id: str):
+def create_sample_member(member_repository: MemberRepository, user_id: int):
     member_repository.add_member(
         first_name=fake.first_name(),
         last_name=fake.last_name(),
@@ -33,13 +31,15 @@ def create_sample_member(member_repository: MemberRepository, user_id: str):
     )
 
 
-def create_sample_data(i: int, user_repository: UserRepository, member_repository: MemberRepository):
+def create_sample_data(i: int,
+                       user_repository: UserRepository,
+                       member_repository: MemberRepository):
     print(f"Creating sample data for user {i}/{N}")
-    user_id = create_sample_user(user_repository)
-    create_sample_member(member_repository, user_id)
+    user = create_sample_user(user_repository)
+    create_sample_member(member_repository, user.id)
 
 
-def process_function(task_queue):
+def process_function(task_queue: Queue):
     with create_db_conn() as conn:
         user_repository = UserRepository(db_conn=conn)
         member_repository = MemberRepository(db_conn=conn)

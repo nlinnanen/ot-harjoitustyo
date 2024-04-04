@@ -6,15 +6,17 @@ authors = ["Niklas Linnanen <nlinnanen@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "3.8.12"
 invoke = "^2.2.0"
 python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.9"
+autopep8 = "^2.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
 faker = "^24.4.0"
 pytest = "^8.1.1"
+pylint = "^3.1.0"
 
 [build-system]
 requires = ["poetry-core"]

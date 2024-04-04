@@ -30,7 +30,7 @@ class TestUserRepository(unittest.TestCase):
     def test_get_all_users(self):
         users = self.user_repository.get_all_users()
         self.assertEqual(len(users), 2)
-    
+
     def test_get_user_by_id(self):
         user = self.user_repository.get_user_by_id(self.user_admin.id)
         self.assertEqual(user.email, "admin@admin.com")
@@ -55,4 +55,3 @@ class TestUserRepository(unittest.TestCase):
     def tearDown(self):
         delete_db_contents(self.db_conn)
         self.db_conn.close()
-    

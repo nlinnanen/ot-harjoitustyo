@@ -1,6 +1,7 @@
 import psycopg2
 from config import DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME
 
+
 def create_db_conn(port=DB_PORT):
     return psycopg2.connect(
         dbname=DB_NAME,
@@ -10,10 +11,12 @@ def create_db_conn(port=DB_PORT):
         port=port
     )
 
-def delete_db_contents(conn=create_db_conn()):
-    with conn.cursor() as cur:
+
+def delete_db_contents(_conn=create_db_conn()):
+    with _conn.cursor() as cur:
         cur.execute("DELETE FROM members")
         cur.execute("DELETE FROM users")
-        conn.commit()
+        _conn.commit()
+
 
 conn = create_db_conn()
