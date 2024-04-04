@@ -7,6 +7,7 @@ Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovellu
 - [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
 - [Tuntikirjanpito](dokumentaatio/tuntikirjanpito.md)
 - [Changelog](dokumentaatio/changelog.md)
+- [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
 ## Asennus
 
