@@ -39,34 +39,34 @@ class UserRepository:
             return [User(*u) for u in users]
    
     
-    def add_user(self, email: str, password: str) -> str:
+    def add_user(self, user: User) -> str:
       """
       Add a new user to the database.
       """
       with self.db_conn.cursor() as cur:
         cur.execute(
-          "INSERT INTO users (email, password) VALUES (%s, %s) RETURNING id", (email, password))
+          "INSERT INTO users (email, password, admin) VALUES (%s, %s, %s) RETURNING id", (user.email, user.password, user.admin))
         self.db_conn.commit()
         user_id = cur.fetchone()[0]
         return user_id
 
-    def update_user(self, user_id, **kwargs):
+    def update_user(self, user: User):
         """
         Update user details based on provided keyword arguments.
         """
-        set_clause = ', '.join([f"{key} = %s" for key in kwargs])
-        values = list(kwargs.values())
-        values.append(user_id)
+        set_clause = ', '.join([f"{key} = %s" for key in user.__dict__])
+        values = list(user.__dict__.values())
+        values.append(user.id)
 
         with self.db_conn.cursor() as cur:
             cur.execute(
                 f"UPDATE users SET {set_clause} WHERE id = %s", tuple(values))
             self.db_conn.commit()
 
-    def delete_user(self, user_id):
+    def delete_user(self, user: User):
         """
         Delete a user from the database by user ID.
         """
         with self.db_conn.cursor() as cur:
-            cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
+            cur.execute("DELETE FROM users WHERE id = %s", (user.id,))
             self.db_conn.commit()
