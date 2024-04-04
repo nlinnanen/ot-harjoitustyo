@@ -1,13 +1,15 @@
 
 from repositories import member_repository, user_repository
-from services import user_service
+from services.registry_service import RegistryService
+
 
 
 def main():
     while True:
         username = input("Enter a username: ")
         password = input("Enter a password: ")
-        user = user_service.log_in(username, password)
+        registry = RegistryService()
+        user = registry.log_in(username, password)
         if user:
             print(f"Welcome {user}")
             break
@@ -54,10 +56,38 @@ def main():
                     member_repository.update_member(member.id, **{field: value})
                     print("Member updated")
                     
-                
+            case "log out":
+                registry.log_out()
+                print("You are now logged out")
+            
+            case "get member":
+                while True:
+                    id = input("Enter member ID: ")
+                    member = member_repository.get_member_by_id(id)
+                    if not member:
+                        print("Invalid member ID")
+                    else:
+                        user = user_repository.get_user_by_id(member.user_id)
+                        print(member)
+                        print(user)
+                        break
 
             case "delete member":
-                print("Delete message")
+                while True:
+                    id = input("Enter member ID: ")
+                    member = member_repository.get_member_by_id(id)
+                    if not member:
+                        print("Invalid member ID")
+                    else:
+                        break
+                confirm = input(f"Are you sure you want to delete {member}? (y/n): ")
+                if confirm.lower() == "y":
+                    try:
+                        registry.delete_user(member.user_id)
+                        print("Member deleted")
+                    except Exception as e:
+                        print(f"Error deleting member: {e}")
+
             case _:
                 print("Unknown command")
     

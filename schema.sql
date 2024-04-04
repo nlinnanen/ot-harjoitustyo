@@ -14,7 +14,7 @@ CREATE TABLE members (
   start_year INTEGER NOT NULL,
   member_until DATE NOT NULL,
   home_municipality VARCHAR(255) NOT NULL,
-  user_id INTEGER REFERENCES users(id),
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
