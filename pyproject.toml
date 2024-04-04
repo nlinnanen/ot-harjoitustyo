@@ -14,6 +14,7 @@ psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 faker = "^24.4.0"
+pytest = "^8.1.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -12,3 +12,17 @@ services:
       - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5432:5432
+
+  # Create a separate service for testing with a different port
+  test-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+    # Expose a different port to avoid conflicts
+      - 5433:5432
