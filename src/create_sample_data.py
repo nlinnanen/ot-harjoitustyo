@@ -55,16 +55,12 @@ def process_function(task_queue):
                 # No task_done() call is needed here
 
 
-def delete_db_contents():
-    conn = create_db_conn()
+def delete_db_contents(conn=None):
+    if conn is None:
+        conn = create_db_conn()
     with conn.cursor() as cur:
         cur.execute("DELETE FROM members")
         cur.execute("DELETE FROM users")
-        user_repository = UserRepository(conn)
-        user_repository.add_user(
-            email="admin@admin.com",
-            password="admin"
-        )
         conn.commit()
 
 
