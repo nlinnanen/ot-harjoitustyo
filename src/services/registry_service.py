@@ -3,6 +3,7 @@ from entities.member import Member
 from entities.user import User
 from repositories import member_repository, user_repository
 from repositories.user_repository import UserRepository
+from repositories.member_repository import MemberRepository
 
 class InvalidCredentialsError(Exception):
     pass
@@ -17,9 +18,9 @@ def admin_required(func):
         
 
 class RegistryService():
-    def __init__(self):
-        self.user_repository = user_repository
-        self.member_repository = member_repository
+    def __init__(self, conn = create_db_conn()):
+        self.user_repository = UserRepository(conn)
+        self.member_repository = MemberRepository(conn)
         self.user = None
 
     def log_in(self, email, password):
