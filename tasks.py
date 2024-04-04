@@ -7,7 +7,7 @@ def start(ctx):
 
 @task
 def test(ctx):
-    ctx.run("python3 -m unittest discover -s src/tests", pty=True)
+    ctx.run("pytest src", pty=True)
 
 @task
 def create_sample_data(ctx):
