@@ -1,5 +1,7 @@
 import psycopg2
 from config import DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME
+from db.member_repository import MemberRepository
+from db.user_repository import UserRepository
 
 
 def create_db_conn(port=DB_PORT):
@@ -20,3 +22,5 @@ def delete_db_contents(_conn=create_db_conn()):
 
 
 conn = create_db_conn()
+user_repository = UserRepository(db_conn=conn)
+member_repository = MemberRepository(db_conn=conn)

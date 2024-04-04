@@ -3,10 +3,10 @@ from services.registry_service import RegistryService
 
 
 def main():
+    registry = RegistryService()
     while True:
         username = input("Enter a username: ")
         password = input("Enter a password: ")
-        registry = RegistryService()
         user = registry.log_in(username, password)
         if user:
             print(f"Welcome {user}")
@@ -16,8 +16,7 @@ def main():
 
     print("You are now logged in")
 
-    registry = RegistryService()
-
+    # TODO: Refactor this
     while True:
         command = input("Enter a command: ").lower()
         if command == "exit":
