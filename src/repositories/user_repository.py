@@ -11,7 +11,7 @@ class UserRepository:
         """
         self.db_conn = db_conn
 
-    def get_user_by_id(self, user_id):
+    def get_user_by_id(self, user_id: int):
         """
         Fetch a single user by their user ID.
         """
@@ -39,16 +39,17 @@ class UserRepository:
             return [User(*u) for u in users]
    
     
-    def add_user(self, user: User) -> str:
+    def add_user(self, user: User) -> User:
       """
       Add a new user to the database.
       """
       with self.db_conn.cursor() as cur:
         cur.execute(
-          "INSERT INTO users (email, password, admin) VALUES (%s, %s, %s) RETURNING id", (user.email, user.password, user.admin))
+          "INSERT INTO users (email, password, admin) VALUES (%s, %s, %s) RETURNING *", (user.email, user.password, user.admin))
         self.db_conn.commit()
-        user_id = cur.fetchone()[0]
-        return user_id
+        res = cur.fetchone()
+        print(f"Res: {res}, type: {type(res)}")
+        return User(*res)
 
     def update_user(self, user: User):
         """
@@ -68,5 +69,7 @@ class UserRepository:
         Delete a user from the database by user ID.
         """
         with self.db_conn.cursor() as cur:
-            cur.execute("DELETE FROM users WHERE id = %s", (user.id,))
+            cur.execute("DELETE FROM users WHERE id = %s RETURNING *", (user.id,))
             self.db_conn.commit()
+            res = cur.fetchone()
+            return User(*res)
