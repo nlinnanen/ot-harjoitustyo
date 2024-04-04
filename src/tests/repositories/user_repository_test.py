@@ -1,10 +1,9 @@
 
 
 import unittest
-from create_sample_data import delete_db_contents
 from entities.user import User
-from repositories import create_db_conn
-from repositories.user_repository import UserRepository
+from db import create_db_conn, delete_db_contents
+from db.user_repository import UserRepository
 
 
 class TestUserRepository(unittest.TestCase):

@@ -1,5 +1,5 @@
 
-from repositories import member_repository, user_repository
+from db import member_repository, user_repository
 from services.registry_service import RegistryService
 
 

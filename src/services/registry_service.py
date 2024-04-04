@@ -1,9 +1,8 @@
-
 from entities.member import Member
 from entities.user import User
-from repositories import member_repository, user_repository
-from repositories.user_repository import UserRepository
-from repositories.member_repository import MemberRepository
+from db import create_db_conn, member_repository, user_repository
+from db.user_repository import UserRepository
+from db.member_repository import MemberRepository
 
 class InvalidCredentialsError(Exception):
     pass
@@ -42,11 +41,9 @@ class RegistryService():
         self.member_repository.delete_member(member_id)
 
     @admin_required
-    def add_member(self, kwargs):
-        for field in Member.__annotations__:
-            if field not in kwargs and field not in ['id', 'created_at']:
-                raise ValueError(f"Missing required field: {field}")
-        return self.member_repository.add_member(**kwargs)
+    def add_user_and_member(self, **kwargs):
+        user_id = self.user_repository.add_user(**kwargs)
+        self.member_repository.add_member(user_id=user_id, **kwargs)
     
     @admin_required
     def update_member(self, member_id, **kwargs):

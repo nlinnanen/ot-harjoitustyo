@@ -4,9 +4,9 @@ from multiprocessing import Process, Queue
 from faker import Faker
 import queue  # For catching the Empty exception
 
-from repositories.member_repository import MemberRepository
-from repositories.user_repository import UserRepository
-from repositories import conn, create_db_conn
+from db.member_repository import MemberRepository
+from db.user_repository import UserRepository
+from db import conn, create_db_conn
 
 fake = Faker(locale='fi_FI')
 task_queue = Queue()
@@ -53,15 +53,6 @@ def process_function(task_queue):
             else:
                 create_sample_data(i, user_repository, member_repository)
                 # No task_done() call is needed here
-
-
-def delete_db_contents(conn=None):
-    if conn is None:
-        conn = create_db_conn()
-    with conn.cursor() as cur:
-        cur.execute("DELETE FROM members")
-        cur.execute("DELETE FROM users")
-        conn.commit()
 
 
 def main_process():
