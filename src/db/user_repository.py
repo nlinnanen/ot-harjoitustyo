@@ -1,8 +1,11 @@
+from typing import Any, Generator, Tuple
+from db.member_repository import require_id
+from db.utils import NotCreatedError, NotFoundError, map_result_to_entity
 from entities.user import User
-
+from psycopg2.extensions import connection
 
 class UserRepository:
-    def __init__(self, db_conn):
+    def __init__(self, db_conn: connection):
         """
         Initialize the repository with a database connection.
         :param db_conn: A database connection object.
@@ -16,25 +19,29 @@ class UserRepository:
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
             user_data = cur.fetchone()
-            return User(*user_data) if user_data else None
+            if not user_data:
+                raise NotFoundError("User not found.")
+            return map_result_to_entity(User, user_data, cur)
 
-    def get_user_by_email(self, email):
+    def get_user_by_email(self, email: str):
         """
         Fetch a single user by their email.
         """
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM users WHERE email = %s", (email,))
             user_data = cur.fetchone()
-            return User(*user_data) if user_data else None
+            if not user_data:
+                raise NotFoundError("User not found.")
+            return map_result_to_entity(User, user_data, cur)
 
-    def get_all_users(self):
+    def get_all_users(self) -> "Generator[User, None, None]":
         """
         Fetch all users from the database.
         """
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT * FROM users")
-            users = cur.fetchall()
-            return [User(*u) for u in users]
+            for user in cur:
+                yield map_result_to_entity(User, user, cur)
 
     def add_user(self, user: User) -> User:
         """
@@ -46,10 +53,12 @@ class UserRepository:
                 (user.email, user.password, user.admin)
             )
             self.db_conn.commit()
-            res = cur.fetchone()
-            print(f"Res: {res}, type: {type(res)}")
-            return User(*res)
+            added_user = cur.fetchone()
+            if not added_user:
+                raise NotCreatedError("User could not be created.")
+            return map_result_to_entity(User, added_user, cur)
 
+    @require_id
     def update_user(self, user: User):
         """
         Update user details based on provided keyword arguments.
@@ -63,7 +72,8 @@ class UserRepository:
                 f"UPDATE users SET {set_clause} WHERE id = %s", tuple(values))
             self.db_conn.commit()
 
-    def delete_user(self, user: User):
+    @require_id
+    def delete_user(self, user: User) -> User:
         """
         Delete a user from the database by user ID.
         """
@@ -72,4 +82,6 @@ class UserRepository:
                 "DELETE FROM users WHERE id = %s RETURNING *", (user.id,))
             self.db_conn.commit()
             res = cur.fetchone()
-            return User(*res)
+            if not res:
+                raise NotFoundError("User not found.")
+            return map_result_to_entity(User, res, cur)
