@@ -1,10 +1,8 @@
-
-
 from typing import Generator
+from psycopg2.extensions import connection
 from db.utils import NotCreatedError, NotFoundError, map_result_to_entity, require_id
 from entities.member import Member
 
-from psycopg2.extensions import connection
 
 class MemberRepository:
     def __init__(self, db_conn: connection):
@@ -44,7 +42,12 @@ class MemberRepository:
                         VALUES (%s, %s, %s, %s, %s, %s) 
                         RETURNING *
                     """,
-                        **new_member.__dict__
+                        (new_member.first_name,
+                         new_member.last_name,
+                         new_member.start_year,
+                         new_member.member_until,
+                         new_member.home_municipality,
+                         new_member.user_id)
                         )
             self.db_conn.commit()
             added_member = cur.fetchone()
@@ -59,23 +62,25 @@ class MemberRepository:
         """
 
         set_clause = ', '.join([f"{key} = %s" for key in member.__dict__])
+        values = list(member.__dict__.values())
 
         with self.db_conn.cursor() as cur:
             cur.execute(
-                f"UPDATE members SET {set_clause} WHERE id = %s", member.id
+                f"UPDATE members SET {set_clause} WHERE id = %s", (
+                    *values, member.id,)
             )
             num_updated = cur.rowcount
             if num_updated == 0:
                 raise NotFoundError("Member not found.")
             self.db_conn.commit()
 
-    @require_id
-    def delete_member(self, member: Member):
+    def delete_member(self, member_id: int):
         """
         Delete a member from the database by member ID.
         """
         with self.db_conn.cursor() as cur:
-            cur.execute("DELETE FROM members WHERE id = %s RETURNING *", (member.id,))
+            cur.execute(
+                "DELETE FROM members WHERE id = %s RETURNING *", (member_id,))
             delted_member = cur.fetchone()
             if not delted_member:
                 raise NotFoundError("Member not found.")

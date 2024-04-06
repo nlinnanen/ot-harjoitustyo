@@ -1,8 +1,9 @@
-from typing import Any, Generator, Tuple
+from typing import Generator
+from psycopg2.extensions import connection
 from db.member_repository import require_id
 from db.utils import NotCreatedError, NotFoundError, map_result_to_entity
 from entities.user import User
-from psycopg2.extensions import connection
+
 
 class UserRepository:
     def __init__(self, db_conn: connection):
@@ -69,17 +70,19 @@ class UserRepository:
 
         with self.db_conn.cursor() as cur:
             cur.execute(
-                f"UPDATE users SET {set_clause} WHERE id = %s", tuple(values))
+                f"UPDATE users SET {set_clause} WHERE id = %s RETURNING *", tuple(values))
+            updated_user = cur.fetchone()
+            if not updated_user:
+                raise NotFoundError("User not found.")
             self.db_conn.commit()
 
-    @require_id
-    def delete_user(self, user: User) -> User:
+    def delete_user(self, user_id: int) -> User:
         """
         Delete a user from the database by user ID.
         """
         with self.db_conn.cursor() as cur:
             cur.execute(
-                "DELETE FROM users WHERE id = %s RETURNING *", (user.id,))
+                "DELETE FROM users WHERE id = %s RETURNING *", (user_id,))
             self.db_conn.commit()
             res = cur.fetchone()
             if not res:
