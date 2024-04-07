@@ -22,6 +22,17 @@ class MemberRepository:
             if not member_data:
                 raise NotFoundError("Member not found.")
             return map_result_to_entity(Member, member_data, cur)
+    
+    def get_member_by_user_id(self, user_id: int) -> Member:
+        """
+        Fetch a single member by their user ID.
+        """
+        with self.db_conn.cursor() as cur:
+            cur.execute("SELECT * FROM members WHERE user_id = %s", (user_id,))
+            member_data = cur.fetchone()
+            if not member_data:
+                raise NotFoundError("Member not found.")
+            return map_result_to_entity(Member, member_data, cur)
 
     def get_all_members(self) -> "Generator[Member, None, None]":
         """

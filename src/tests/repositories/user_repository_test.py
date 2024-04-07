@@ -1,10 +1,10 @@
 
 
 import unittest
-from db.utils import NotFoundError
 from entities.user import User
-from db import create_db_conn, delete_db_contents
+from db.utils import NotFoundError
 from db.user_repository import UserRepository
+from db import create_db_conn, delete_db_contents
 
 
 class TestUserRepository(unittest.TestCase):

@@ -1,7 +1,6 @@
 
 
 import datetime
-import sys
 import unittest
 from db import create_db_conn, delete_db_contents
 from db.member_repository import MemberRepository

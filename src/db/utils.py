@@ -2,15 +2,19 @@
 from typing import Any, Callable, Tuple, Type, TypeVar, cast
 from functools import wraps
 
+
 class NotFoundError(Exception):
     pass
+
 
 class NotCreatedError(Exception):
     pass
 
 # Generoitu koodi alkaa
 
+
 T = TypeVar('T')
+
 
 def require_id(func: Callable[..., T]) -> Callable[..., T]:
     @wraps(func)
@@ -23,7 +27,9 @@ def require_id(func: Callable[..., T]) -> Callable[..., T]:
 
 # Generoitu koodi loppuu
 
+
 E = TypeVar('E')
+
 
 def map_result_to_entity(entity_class: Type[E], result: "Tuple[Any]", cur) -> E:
     """
