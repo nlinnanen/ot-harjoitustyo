@@ -40,7 +40,7 @@ Sovelluksen loogisen tietomallin muodostavat luokat [User](../src/entities/user.
 
 Toiminnallisista kokonaisuuksista vastaa luokkan [RegistryService](../src/services/registry_service.py) ainoa olio. Luokka tarjoaa kaikille käyttöliittymän toiminnoille omat metodit.
 
-_TodoService_ pääsee käsiksi käyttäjiin ja todoihin tietojen tallennuksesta vastaavan pakkauksessa _repositories_ sijaitsevien luokkien [MemberRepository](../src/db/member_repository.py) ja [UserRepository](../src/db/user_repository.py) kautta. Luokkien toteutuksen [injektoidaan](https://en.wikipedia.org/wiki/Dependency_injection) sovelluslogiikalle konstruktorikutsun yhteydessä.
+_RegistryService_ pääsee käsiksi käyttäjiin ja todoihin tietojen tallennuksesta vastaavan pakkauksessa _repositories_ sijaitsevien luokkien [MemberRepository](../src/db/member_repository.py) ja [UserRepository](../src/db/user_repository.py) kautta. Luokkien toteutuksen [injektoidaan](https://en.wikipedia.org/wiki/Dependency_injection) sovelluslogiikalle konstruktorikutsun yhteydessä.
 
 Ohjelman osien suhdetta kuvaava luokka/pakkauskaavio:
 

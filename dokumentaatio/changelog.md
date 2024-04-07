@@ -9,4 +9,7 @@
 - Yksinkertainen tekstikäyttöliittymä
 - Käyttäjä voi listata, lisätä ja poistaa jäseniä
 - Käyttäjä voi kirjautua sisään
-- Repositorioiden testaus
+- Repositorioiden ja serviceiden testaus
+- Arkkihtektuurikuvaus lisätty
+- Koodin laadun varmistus pylintillä ja autopep8:lla
+- Koodin refaktorointia
