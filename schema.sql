@@ -1,21 +1,21 @@
 
 CREATE TABLE users (
-  email VARCHAR(255) NOT NULL,
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   admin BOOLEAN DEFAULT FALSE,
-  id SERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE members (
+  id SERIAL PRIMARY KEY,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
   start_year INTEGER NOT NULL,
   member_until DATE NOT NULL,
   home_municipality VARCHAR(255) NOT NULL,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  id SERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (email, password) VALUES ('admin@admin.com', 'admin', TRUE);
+INSERT INTO users (email, password, admin) VALUES ('admin@admin.com', 'admin', TRUE);
