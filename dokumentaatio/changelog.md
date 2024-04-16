@@ -13,3 +13,6 @@
 - Arkkihtektuurikuvaus lisätty
 - Koodin laadun varmistus pylintillä ja autopep8:lla
 - Koodin refaktorointia
+
+## Viikko 4
+- Wappua vietetty, vain pieniä bugikorjauksia

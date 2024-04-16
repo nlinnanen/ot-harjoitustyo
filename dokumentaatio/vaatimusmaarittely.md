@@ -24,13 +24,13 @@ Sovellus aukeaa persunäkymään, mistä pystyy hakemaan jäseniä. Ylläpitäj�
 ## Kirjautumisen jälkeen
 
 - Jäsenhallinta (pääkäyttäjä)
-  - Jäsenen lisääminen
-  - Jäsenen poistaminen
-  - Jäsenen tietojen muokkaaminen
+  - Jäsenen lisääminen (tehty tekstikäyttöliittymällä)
+  - Jäsenen poistaminen (tehty tekstikäyttöliittymällä)
+  - Jäsenen tietojen muokkaaminen (tehty tekstikäyttöliittymällä)
   - Jäsenten haku eri hakuehdoilla
   - Jäsenten listaus eri järjestyksissä
 - Omien kirjautumistietojen muokkaaminen
-- Uloskirjautuminen
+- Uloskirjautuminen (tehty tekstikäyttöliittymällä)
 
 ## Jatkokehitysideoita
 

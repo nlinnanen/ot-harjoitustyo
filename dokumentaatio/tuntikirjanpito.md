@@ -8,5 +8,7 @@
 | 4.4. | 5 | Sovelluslogiikkaa, testejä, pylint ja autopep8, arkkitehtuuri |
 | 5.4. | 2 | Repositorioiden refaktorointi, tyypittäminen ja datan validointi |
 | 6.4. | 3 | Member repository ja registry service testit |
+| 7.4. | 1 | Käyttöliittymän kehittämisen aloittaminen |
+| 16.4. | 0.5 | Sovelluksen korjaus palautteiden persutella ja viikon 4 pakolliset muutokset |
 
-Yhteensä 16 tuntia.
+Yhteensä 16.5 tuntia.
