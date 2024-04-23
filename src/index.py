@@ -25,11 +25,25 @@ def main():
 
         if command == "help":
             print("Help message")
+        elif command == "list users":
+            print("List of users:")
+            users = registry.user_repository.get_all_users()
+            for user in users:
+                print(user)
         elif command == "list members":
             print("List of members:")
             members = registry.member_repository.get_all_members()
             for member in members:
                 print(member)
+        elif command == "create user":
+            email = input("Enter email: ")
+            password = input("Enter password: ")
+            registry.add_user(
+                email=email,
+                password=password
+            )
+            print("User created")
+
         elif command == "update member":
             member = None
             while True:
@@ -55,7 +69,14 @@ def main():
                 registry.member_repository.update_member(
                     member.id, **{field: value})
                 print("Member updated")
-
+        elif command == "log in":
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+            user = registry.log_in(username, password)
+            if user:
+                print(f"Welcome {user}")
+            else:
+                print("Invalid username or password")
         elif command == "log out":
             registry.log_out()
             print("You are now logged out")
