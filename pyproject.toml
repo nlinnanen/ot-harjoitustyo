@@ -11,6 +11,8 @@ invoke = "^2.2.0"
 psycopg2-binary = "^2.9.9"
 autopep8 = "^2.1.0"
 python-dotenv = "^1.0.1"
+pysimplegui = "^5.0.4"
+tk = "^0.1.0"
 
 
 [tool.poetry.group.dev.dependencies]

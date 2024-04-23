@@ -1,4 +1,5 @@
 from typing import Generator, Optional
+from db.utils import NotFoundError
 from entities.member import Member
 from entities.user import User
 from db import user_repository as default_user_repository
@@ -6,6 +7,9 @@ from db import member_repository as default_member_repository
 
 
 class InvalidCredentialsError(Exception):
+    pass
+
+class EmailExistsError(Exception):
     pass
 
 
@@ -73,10 +77,17 @@ class RegistryService():
 
     @admin_required
     def add_user(self, email: str, password: str, admin: bool = False):
-        return self.user_repository.add_user(User(email=email, password=password, admin=admin))
+        try:
+            self.user_repository.get_user_by_email(email)
+            raise EmailExistsError
+        except NotFoundError:
+            return self.user_repository.add_user(User(email=email, password=password, admin=admin))
 
     @admin_required
     def update_member(self, member_id, **kwargs):
         member = self.member_repository.get_member_by_id(member_id)
         # The dictionary is created and then unpacked to ensure that the keys are unique
         self.member_repository.update_member(Member(**{**member.__dict__, **kwargs}))
+
+
+registry = RegistryService()
