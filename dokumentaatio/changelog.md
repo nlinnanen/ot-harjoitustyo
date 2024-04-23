@@ -15,4 +15,10 @@
 - Koodin refaktorointia
 
 ## Viikko 4
+
 - Wappua vietetty, vain pieniä bugikorjauksia
+
+## Viikko 5
+
+- Käyttäjän lisääminen ja niiden listaaminen
+- GitHub release

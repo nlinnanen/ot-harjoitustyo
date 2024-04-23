@@ -28,3 +28,7 @@ Testit voi suorittaa komennolla `poetry run invoke test`
 ### Testikattavuus
 
 Testikattavuusraportin voi generoida komennolla `poetry run invoke coverage-report`
+
+### Github release
+
+Github release löydyy osoitteesta https://github.com/nlinnanen/ot-harjoitustyo/releases/tag/viikko5
