@@ -22,3 +22,11 @@
 
 - Käyttäjän lisääminen ja niiden listaaminen
 - GitHub release
+
+## Viikko 6
+
+- Help-komento
+- Refaktoriminen PostgreSQL-tietokannasta SQLite-tietokantaan
+- Linter bugien korjaus
+- UI:n refaktorointi
+- Wapun vietto

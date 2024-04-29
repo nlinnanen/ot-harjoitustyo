@@ -11,5 +11,6 @@
 | 7.4.  | 1    | Käyttöliittymän kehittämisen aloittaminen                                    |
 | 16.4. | 0.5  | Sovelluksen korjaus palautteiden persutella ja viikon 4 pakolliset muutokset |
 | 23.4. | 2    | Käyttöliittymän kehittäminen, Github release, lisää komentoja                |
+| 29.4. | 1.5  | SQLiteen refaktorointi, linter bugien korjaus, UI:n refaktorointi            |
 
-Yhteensä 18.5 tuntia.
+Yhteensä 20 tuntia.
