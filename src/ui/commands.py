@@ -128,4 +128,4 @@ def command_handler(command: str, registry: RegistryService):
     elif command == "delete member":
         delete_member(registry)
     else:
-        print("Unknown command")
+        print("Unknown command. Type 'help' for a list of commands")

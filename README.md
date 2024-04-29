@@ -13,6 +13,7 @@ Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovellu
 
 2. Asenna riippuvuudet komennolla `poetry install`
 3. Suorita sovellus komennolla `poetry run invoke start`
+4. Esimerkkidataa voi lisätä komennolla `poetry run invoke create sample data`
 
 ## Komentorivitoiminnot
 

@@ -8,10 +8,11 @@ from db.member_repository import MemberRepository
 from db.user_repository import UserRepository
 from db import create_db_conn, delete_db_contents
 from entities.user import User
+from entities.member import Member
 
 fake = Faker(locale='fi_FI')
 
-N = 10000
+N = 100
 
 
 def create_sample_user(user_repository: UserRepository):
@@ -21,13 +22,15 @@ def create_sample_user(user_repository: UserRepository):
 
 def create_sample_member(member_repository: MemberRepository, user_id: int):
     member_repository.add_member(
-        first_name=fake.first_name(),
+        Member(
+            first_name=fake.first_name(),
         last_name=fake.last_name(),
         start_year=fake.year(),
         member_until=fake.date_between(
             start_date='-5y', end_date='+1y').isoformat(),
         home_municipality=fake.city(),
         user_id=user_id
+        )
     )
 
 
@@ -68,7 +71,7 @@ def main_process():
     for i in range(N):
         task_queue.put(i)
 
-    num_processes = 30  # Adjust based on your task and system capabilities
+    num_processes = 4  # Adjust based on your task and system capabilities
 
     processes = []
     for _ in range(num_processes):
