@@ -12,7 +12,7 @@ from entities.user import User
 
 class MemberRepositoryTest(unittest.TestCase):
     def setUp(self):
-        conn = create_db_conn("5433")
+        conn = create_db_conn("test.db")
         self.member_repository = MemberRepository(conn)
         self.user_repository = UserRepository(conn)
         delete_db_contents(conn)

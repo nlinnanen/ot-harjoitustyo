@@ -1,4 +1,5 @@
 
+from sqlite3 import Cursor
 from typing import Any, Callable, Tuple, Type, TypeVar, cast
 from functools import wraps
 
@@ -31,7 +32,7 @@ def require_id(func: Callable[..., T]) -> Callable[..., T]:
 E = TypeVar('E')
 
 
-def map_result_to_entity(entity_class: Type[E], result: "Tuple[Any]", cur) -> E:
+def map_result_to_entity(entity_class: Type[E], result: "Tuple[Any]", cursor_description) -> E:
     """
     Map a result from a database query to a entity object.
     Ensure that the column names in the database match the attribute names of the User class.
@@ -41,6 +42,6 @@ def map_result_to_entity(entity_class: Type[E], result: "Tuple[Any]", cur) -> E:
     :param cur: A database cursor object.
     :return: A User object.
     """
-    column_names = [desc[0] for desc in cur.description]
+    column_names = [desc[0] for desc in cursor_description]
     entity_data = dict(zip(column_names, result))
     return entity_class(**entity_data)

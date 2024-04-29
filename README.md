@@ -1,6 +1,6 @@
 # Ohjelmistotekniikka, harjoitustyö
 
-Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovelluksessa on mahdollista lisätä, poistaa ja muokata jäseniä. Jäseniä voi hakea nimen perusteella. Sovellus on toteutettu Pythonilla ja se tallentaa jäsenet PostgreSQL-tietokantaan. Sovellus on tehty osana Helsingin yliopiston Ohjelmistotekniikka-kurssia.
+Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovelluksessa on mahdollista lisätä, poistaa ja muokata jäseniä. Jäseniä voi hakea nimen perusteella. Sovellus on toteutettu Pythonilla ja se tallentaa jäsenet SQLite-tietokantaan. Sovellus on tehty osana Helsingin yliopiston Ohjelmistoteknikka-kurssia.
 
 ## Dokumentaatio
 
@@ -11,7 +11,6 @@ Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovellu
 
 ## Asennus
 
-1. Käynnistä PostgreSQL-tietokanta Dockerilla komennolla `docker compose up -d`
 2. Asenna riippuvuudet komennolla `poetry install`
 3. Suorita sovellus komennolla `poetry run invoke start`
 

@@ -13,7 +13,7 @@ from services.registry_service import RegistryService
 class RegistryServiceTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        connection = create_db_conn("5433")
+        connection = create_db_conn("test.db")
         self.registry = RegistryService(
             UserRepository(connection),
             MemberRepository(connection)
@@ -74,7 +74,7 @@ class RegistryServiceTest(unittest.TestCase):
         )
         member = self.registry.get_member_by_id(self.member1.id)
         self.assertEqual(member.home_municipality, "Vantaa")
-    
+
     def test_update_self(self):
         if self.member1.id is None:
             return self.fail("Member1 id is None")

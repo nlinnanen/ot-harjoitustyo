@@ -48,7 +48,7 @@ Ohjelman osien suhdetta kuvaava luokka/pakkauskaavio:
 
 ## Tietojen pysyväistallennus
 
-Pakkauksen _repositories_ luokat `MemberRepository` ja `UserRepository` huolehtivat tietojen tallettamisesta PostgreSQL-tietokantaan,
+Pakkauksen _repositories_ luokat `MemberRepository` ja `UserRepository` huolehtivat tietojen tallettamisesta SQLite-tietokantaan,
 
 Luokat noudattavat [Repository](https://en.wikipedia.org/wiki/Data_access_object) -suunnittelumallia ja ne on tarvittaessa mahdollista korvata uusilla toteutuksilla, jos sovelluksen datan talletustapaa päätetään vaihtaa.
 

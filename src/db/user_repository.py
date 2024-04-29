@@ -1,90 +1,89 @@
+import sqlite3
 from typing import Generator
-from psycopg2.extensions import connection
+from entities.user import User
 from db.member_repository import require_id
 from db.utils import NotCreatedError, NotFoundError, map_result_to_entity
-from entities.user import User
-
 
 class UserRepository:
-    def __init__(self, db_conn: connection):
+    def __init__(self, db_conn: sqlite3.Connection):
         """
         Initialize the repository with a database connection.
-        :param db_conn: A database connection object.
         """
         self.db_conn = db_conn
 
-    def get_user_by_id(self, user_id: int):
-        """
-        Fetch a single user by their user ID.
-        """
-        with self.db_conn.cursor() as cur:
-            cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-            user_data = cur.fetchone()
-            if not user_data:
-                raise NotFoundError("User not found.")
-            return map_result_to_entity(User, user_data, cur)
+    def get_user_by_id(self, user_id: int) -> User:
+        cursor = self.db_conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+        user_data = cursor.fetchone()
+        cursor.close()
+        if not user_data:
+            raise NotFoundError("User not found.")
+        cursor_description = cursor.description
+        cursor.close()
+        return map_result_to_entity(User, user_data, cursor_description)
 
-    def get_user_by_email(self, email: str):
-        """
-        Fetch a single user by their email.
-        """
-        with self.db_conn.cursor() as cur:
-            cur.execute("SELECT * FROM users WHERE email = %s", (email,))
-            user_data = cur.fetchone()
-            if not user_data:
-                raise NotFoundError("User not found.")
-            return map_result_to_entity(User, user_data, cur)
+    def get_user_by_email(self, email: str) -> User:
+        cursor = self.db_conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+        user_data = cursor.fetchone()
+        cursor.close()
+        if not user_data:
+            raise NotFoundError("User not found.")
+        cursor_description = cursor.description
+        cursor.close()
+        return map_result_to_entity(User, user_data, cursor_description)
 
     def get_all_users(self) -> "Generator[User, None, None]":
-        """
-        Fetch all users from the database.
-        """
-        with self.db_conn.cursor() as cur:
-            cur.execute("SELECT * FROM users")
-            for user in cur:
-                yield map_result_to_entity(User, user, cur)
+        cursor = self.db_conn.cursor()
+        cursor.execute("SELECT * FROM users")
+        cursor_description = cursor.description
+        for user in cursor:
+            yield map_result_to_entity(User, user, cursor_description)
+        cursor.close()
 
     def add_user(self, user: User) -> User:
-        """
-        Add a new user to the database.
-        """
-        with self.db_conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO users (email, password, admin) VALUES (%s, %s, %s) RETURNING *",
-                (user.email, user.password, user.admin)
-            )
-            self.db_conn.commit()
-            added_user = cur.fetchone()
-            if not added_user:
-                raise NotCreatedError("User could not be created.")
-            return map_result_to_entity(User, added_user, cur)
+        cursor = self.db_conn.cursor()
+        cursor.execute(
+            "INSERT INTO users (email, password, admin) VALUES (?, ?, ?)",
+            (user.email, user.password, user.admin)
+        )
+        user_id = cursor.lastrowid
+        print("Row id: {}".format(user_id))
+        self.db_conn.commit()
+        cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+        added_user = cursor.fetchone()
+        if not added_user:
+            raise NotCreatedError("User could not be created.")
+        cursor_description = cursor.description
+        cursor.close()
+        return map_result_to_entity(User, added_user, cursor_description)
 
     @require_id
     def update_user(self, user: User):
-        """
-        Update user details based on provided keyword arguments.
-        """
-        set_clause = ', '.join([f"{key} = %s" for key in user.__dict__])
-        values = list(user.__dict__.values())
+        set_clause = ', '.join([f"{key} = ?" for key in user.__dict__ if key != 'id'])
+        values = [user.__dict__[key] for key in user.__dict__ if key != 'id']
         values.append(user.id)
+        cursor = self.db_conn.cursor()
+        cursor.execute(
+            f"UPDATE users SET {set_clause} WHERE id = ?", values)
+        self.db_conn.commit()
+        cursor.execute("SELECT * FROM users WHERE id = ?", (user.id,))
+        updated_user = cursor.fetchone()
+        if not updated_user:
+            raise NotFoundError("User not found.")
+        cursor_description = cursor.description
+        cursor.close()
+        return map_result_to_entity(User, updated_user, cursor_description)
 
-        with self.db_conn.cursor() as cur:
-            cur.execute(
-                f"UPDATE users SET {set_clause} WHERE id = %s RETURNING *", tuple(values))
-            updated_user = cur.fetchone()
-            if not updated_user:
-                raise NotFoundError("User not found.")
-            self.db_conn.commit()
+    def delete_user(self, user_id: int):
+        cursor = self.db_conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+        user = cursor.fetchone()
+        if not user:
+            cursor.close()
+            raise NotFoundError("User not found.")
 
-    def delete_user(self, user_id: int) -> User:
-        """
-        Delete a user from the database by user ID.
-        """
-        with self.db_conn.cursor() as cur:
-            cur.execute(
-                "DELETE FROM users WHERE id = %s RETURNING *", (user_id,))
-            self.db_conn.commit()
-            res = cur.fetchone()
-            if not res:
-                raise NotFoundError("User not found.")
-            return map_result_to_entity(User, res, cur)
+        cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        self.db_conn.commit()
+        cursor.close()
+        cursor_description = cursor.description
