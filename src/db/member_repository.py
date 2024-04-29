@@ -3,17 +3,16 @@ from typing import Generator
 from db.utils import NotCreatedError, NotFoundError, map_result_to_entity, require_id
 from entities.member import Member
 
-
 class MemberRepository:
     def __init__(self, db_conn: sqlite3.Connection):
         """
-        Initialize the repository with a database connection.
+        Alustaa repositorion annetulla tietokantayhteydellä.
         """
         self.db_conn = db_conn
 
     def get_member_by_id(self, member_id: int) -> Member:
         """
-        Fetch a single member by their member ID.
+        Hakee jäsenen tietokannasta käyttäen jäsenen tunnusnumeroa (ID).
         """
         cursor = self.db_conn.cursor()
         cursor.execute("SELECT * FROM members WHERE id = ?", (member_id,))
@@ -21,12 +20,12 @@ class MemberRepository:
         cursor_description = cursor.description
         cursor.close()
         if not member_data:
-            raise NotFoundError("Member not found.")
+            raise NotFoundError("Jäsentä ei löydy.")
         return map_result_to_entity(Member, member_data, cursor_description)
 
     def get_member_by_user_id(self, user_id: int) -> Member:
         """
-        Fetch a single member by their user ID.
+        Hakee jäsenen tietokannasta käyttäen käyttäjän tunnusnumeroa (user ID).
         """
         cursor = self.db_conn.cursor()
         cursor.execute("SELECT * FROM members WHERE user_id = ?", (user_id,))
@@ -34,12 +33,12 @@ class MemberRepository:
         cursor_description = cursor.description
         cursor.close()
         if not member_data:
-            raise NotFoundError("Member not found.")
+            raise NotFoundError("Jäsentä ei löydy.")
         return map_result_to_entity(Member, member_data, cursor_description)
 
     def get_all_members(self) -> "Generator[Member, None, None]":
         """
-        Fetch all members from the database.
+        Hakee kaikki jäsenet tietokannasta.
         """
         cursor = self.db_conn.cursor()
         cursor.execute("SELECT * FROM members")
@@ -50,7 +49,7 @@ class MemberRepository:
 
     def add_member(self, new_member: Member) -> Member:
         """
-        Add a new member to the database.
+        Lisää uuden jäsenen tietokantaan.
         """
         cursor = self.db_conn.cursor()
         cursor.execute(
@@ -79,13 +78,13 @@ class MemberRepository:
         cursor_description = cursor.description
         cursor.close()
         if not added_member:
-            raise NotCreatedError("Member not created.")
+            raise NotCreatedError("Jäsenen luonti epäonnistui.")
         return map_result_to_entity(Member, added_member, cursor_description)
 
     @require_id
     def update_member(self, member: Member):
         """
-        Update member details based on provided keyword arguments.
+        Päivittää jäsenen tiedot tietokannassa annettujen tietojen perusteella.
         """
         set_clause = ', '.join([f"{key} = ?" for key in member.__dict__ if key != 'id'])
         values = [member.__dict__[key] for key in member.__dict__ if key != 'id']
@@ -96,19 +95,19 @@ class MemberRepository:
         num_updated = cursor.rowcount
         cursor.close()
         if num_updated == 0:
-            raise NotFoundError("Member not found.")
+            raise NotFoundError("Jäsentä ei löydy.")
         self.db_conn.commit()
 
     def delete_member(self, member_id: int):
         """
-        Delete a member from the database by member ID.
+        Poistaa jäsenen tietokannasta käyttäen jäsenen tunnusnumeroa.
         """
         cursor = self.db_conn.cursor()
         cursor.execute("SELECT * FROM members WHERE id = ?", (member_id,))
         deleted_member = cursor.fetchone()
         if not deleted_member:
             cursor.close()
-            raise NotFoundError("Member not found.")
+            raise NotFoundError("Jäsentä ei löydy.")
 
         cursor.execute("DELETE FROM members WHERE id = ?", (member_id,))
         self.db_conn.commit()
