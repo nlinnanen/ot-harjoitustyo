@@ -1,5 +1,3 @@
-
-from sqlite3 import Cursor
 from typing import Any, Callable, Tuple, Type, TypeVar, cast
 from functools import wraps
 

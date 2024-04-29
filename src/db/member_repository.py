@@ -54,8 +54,23 @@ class MemberRepository:
         """
         cursor = self.db_conn.cursor()
         cursor.execute(
-            "INSERT INTO members (first_name, last_name, start_year, member_until, home_municipality, user_id) VALUES (?, ?, ?, ?, ?, ?)",
-            (new_member.first_name, new_member.last_name, new_member.start_year, new_member.member_until, new_member.home_municipality, new_member.user_id)
+            """INSERT INTO members (
+                first_name,
+                last_name,
+                start_year,
+                member_until,
+                home_municipality,
+                user_id
+            )
+            VALUES (?, ?, ?, ?, ?, ?)""",
+            (
+                new_member.first_name,
+                new_member.last_name,
+                new_member.start_year,
+                new_member.member_until,
+                new_member.home_municipality,
+                new_member.user_id
+            )
         )
         new_member_id = cursor.lastrowid
         self.db_conn.commit()
@@ -79,7 +94,6 @@ class MemberRepository:
         cursor.execute(
             f"UPDATE members SET {set_clause} WHERE id = ?", values)
         num_updated = cursor.rowcount
-        cursor_description = cursor.description
         cursor.close()
         if num_updated == 0:
             raise NotFoundError("Member not found.")
@@ -98,5 +112,4 @@ class MemberRepository:
 
         cursor.execute("DELETE FROM members WHERE id = ?", (member_id,))
         self.db_conn.commit()
-        cursor_description = cursor.description
         cursor.close()

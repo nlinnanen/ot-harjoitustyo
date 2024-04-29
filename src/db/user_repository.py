@@ -48,7 +48,6 @@ class UserRepository:
             (user.email, user.password, user.admin)
         )
         user_id = cursor.lastrowid
-        print("Row id: {}".format(user_id))
         self.db_conn.commit()
         cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
         added_user = cursor.fetchone()
@@ -86,4 +85,3 @@ class UserRepository:
         cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
         self.db_conn.commit()
         cursor.close()
-        cursor_description = cursor.description

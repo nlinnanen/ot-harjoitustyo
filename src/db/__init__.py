@@ -5,12 +5,15 @@ from db.user_repository import UserRepository
 def init_db(connection):
     cursor = connection.cursor()
 
-    with open('schema.sql', 'r') as sql_file:
+    with open('schema.sql', 'r', encoding="UTF-8") as sql_file:
         sql_script = sql_file.read()
 
     cursor.executescript(sql_script)
     try:
-        cursor.execute("INSERT INTO users (email, password, admin) VALUES (?, ?, ?)", ("admin@admin.com", "admin", 1))
+        cursor.execute(
+            "INSERT INTO users (email, password, admin) VALUES (?, ?, ?)",
+            ("admin@admin.com", "admin", 1)
+        )
     except sqlite3.IntegrityError:
         pass
 

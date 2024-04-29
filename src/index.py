@@ -1,5 +1,6 @@
 
 from services.registry_service import RegistryService
+from ui.commands import command_handler
 
 
 def main():
@@ -16,112 +17,9 @@ def main():
 
     print("You are now logged in")
 
-    # TODO: Refactor this
     while True:
         command = input("Enter a command: ").lower()
-        if command == "exit":
-            print("Goodbye")
-            break
-
-        if command == "help":
-            print("""
-                Available commands:
-                    - list users
-                    - list members
-                    - create user
-                    - update member
-                    - log in
-                    - log out
-                    - get member
-                    - delete member
-                    - exit
-                """)
-        elif command == "list users":
-            print("List of users:")
-            users = registry.user_repository.get_all_users()
-            for user in users:
-                print(user)
-        elif command == "list members":
-            print("List of members:")
-            members = registry.member_repository.get_all_members()
-            for member in members:
-                print(member)
-        elif command == "create user":
-            email = input("Enter email: ")
-            password = input("Enter password: ")
-            registry.add_user(
-                email=email,
-                password=password
-            )
-            print("User created")
-
-        elif command == "update member":
-            member = None
-            while True:
-                member_id = input("Enter member ID: ")
-                member = registry.member_repository.get_member_by_id(member_id)
-                if not member:
-                    print("Invalid member ID")
-                else:
-                    break
-
-                print(f"Member {member}")
-
-            while True:
-                field = input("Enter field to update (empty to exit): ")
-                if field == "":
-                    break
-
-                if field not in member.__dict__:
-                    print("Invalid field")
-                    continue
-
-                value = input("Enter new value: ")
-                registry.member_repository.update_member(
-                    member.id, **{field: value})
-                print("Member updated")
-        elif command == "log in":
-            username = input("Enter username: ")
-            password = input("Enter password: ")
-            user = registry.log_in(username, password)
-            if user:
-                print(f"Welcome {user}")
-            else:
-                print("Invalid username or password")
-        elif command == "log out":
-            registry.log_out()
-            print("You are now logged out")
-
-        elif command == "get member":
-            while True:
-                member_id = input("Enter member ID: ")
-                member = registry.member_repository.get_member_by_id(member_id)
-                if not member:
-                    print("Invalid member ID")
-                else:
-                    user = registry.user_repository.get_user_by_id(
-                        member.user_id)
-                    print(member)
-                    print(user)
-                    break
-
-        elif command == "delete member":
-            while True:
-                member_id = input("Enter member ID: ")
-                member = registry.member_repository.get_member_by_id(member_id)
-                if not member:
-                    print("Invalid member ID")
-                else:
-                    break
-
-            confirm = input(
-                f"Are you sure you want to delete {member}? (y/n): ")
-            if confirm.lower() == "y":
-                registry.delete_member(member.id)
-                print("Member deleted")
-
-        else:
-            print("Unknown command")
+        command_handler(command, registry)
 
 
 if __name__ == "__main__":
