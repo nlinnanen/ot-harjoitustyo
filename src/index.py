@@ -24,7 +24,18 @@ def main():
             break
 
         if command == "help":
-            print("Help message")
+            print("""
+                Available commands:
+                    - list users
+                    - list members
+                    - create user
+                    - update member
+                    - log in
+                    - log out
+                    - get member
+                    - delete member
+                    - exit
+                """)
         elif command == "list users":
             print("List of users:")
             users = registry.user_repository.get_all_users()
