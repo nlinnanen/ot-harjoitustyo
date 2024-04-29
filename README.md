@@ -31,4 +31,4 @@ Testikattavuusraportin voi generoida komennolla `poetry run invoke coverage-repo
 
 ### Github release
 
-Github release löydyy osoitteesta https://github.com/nlinnanen/ot-harjoitustyo/releases/tag/viikko5
+Github release löydyy osoitteesta https://github.com/nlinnanen/ot-harjoitustyo/releases/tag/viikko6
