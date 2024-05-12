@@ -6,11 +6,11 @@ from db import member_repository as default_member_repository
 
 class InvalidCredentialsError(Exception):
     """Poikkeus joka heitetään, kun käyttäjän kirjautumistiedot ovat virheelliset."""
-    pass
 
 def admin_required(func):
     """
-    Decorator, joka tarkistaa, että käyttäjä on kirjautunut sisään ja että hänellä on ylläpitäjän oikeudet.
+    Decorator, joka tarkistaa, että käyttäjä on kirjautunut sisään
+    ja että hänellä on ylläpitäjän oikeudet.
     """
     def wrapper(self, *args, **kwargs):
         if not self.user or not self.user.admin:
@@ -24,7 +24,9 @@ def user_required(func):
     """
     def wrapper(self, *args, **kwargs):
         if not self.user:
-            raise PermissionError("Sinun täytyy olla kirjautuneena sisään suorittaaksesi tämän toiminnon")
+            raise PermissionError(
+                "Sinun täytyy olla kirjautuneena sisään suorittaaksesi tämän toiminnon"
+            )
         return func(self, *args, **kwargs)
     return wrapper
 
@@ -78,7 +80,9 @@ class RegistryService():
     def update_current_member(self, **kwargs):
         """Päivittää kirjautuneen käyttäjän tietoihin liittyvän jäsenen tiedot."""
         if not self.user:
-            raise PermissionError("Sinun täytyy olla kirjautuneena sisään suorittaaksesi tämän toiminnon")
+            raise PermissionError(
+                "Sinun täytyy olla kirjautuneena sisään suorittaaksesi tämän toiminnon"
+            )
         current_member = self.member_repository.get_member_by_user_id(self.user.id)
         self.member_repository.update_member(Member(**{**current_member.__dict__, **kwargs}))
 
