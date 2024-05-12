@@ -19,7 +19,7 @@ Sovellus on tarkoitettu käytettäväksi yhdistyksen jäsenrekisterinä. Sovellu
 
 ### Ohjelman suorittaminen
 
-Ohjelman voi suorittaa komennolla `poetry run invoke start`
+Ohjelman voi suorittaa komennolla `poetry run invoke start`. Ohjelma käynnistyy ja tulostaa käyttöohjeet. Kirjautumiseen käytetään käyttäjätunnusta `admin` ja salasanaa `admin`.
 
 ### Testaus
 
